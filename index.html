@@ -7,250 +7,366 @@
     <title>UkeFlow 🌺 - Tu Entrenador de Ukulele</title>
     <style>
         :root {
-            --primary: #FF6B6B;
-            /* Corail */
-            --secondary: #4ECDC4;
-            /* Turquoise */
-            --accent: #FFE66D;
-            /* Yellow */
-            --dark: #2C3E50;
-            --light: #F7F9FC;
-            --card-bg: #FFFFFF;
+            /* RASTA PALETTE 🦁 */
+            --primary: #009B4D;
+            /* Green */
+            --secondary: #FFD700;
+            /* Gold */
+            --accent: #E43831;
+            /* Red */
+            --dark: #111;
+            --light: #fff;
+            --gradient: linear-gradient(135deg, #009B4D, #FFD700, #E43831);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--light);
+            background-color: #fdfdfd;
+            background-image: radial-gradient(#FFD700 1.5px, transparent 1.5px);
+            background-size: 25px 25px;
             color: var(--dark);
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-top: 10px solid;
+            border-image: var(--gradient) 1;
         }
 
         /* HEADER */
         header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 0.5rem;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            flex-shrink: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             gap: 10px;
         }
 
-        /* MAIN CONTENT */
+        header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+
+        /* MAIN LAYOUT */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 1rem;
+            background: #ffffff;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-            overflow-y: auto;
+            align-self: center;
+            width: calc(100% - 40px);
+            border: 1px solid #f0f0f0;
         }
 
-        /* CARD STYLES */
-        .card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        /* SEARCH / SELECT */
-        .search-container {
+        /* TOP CONTROL BAR */
+        .control-bar {
             display: flex;
             gap: 10px;
-            margin-bottom: 1rem;
-            width: 100%;
+            padding: 10px;
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            align-items: center;
         }
 
         select {
             flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: 2px solid #eee;
-            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            font-size: 0.9rem;
+            height: 32px;
         }
 
-        /* CHORD DISPLAY (BIG) */
-        #active-chord-display {
+        .mini-btn {
+            border: none;
+            background: var(--dark);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: transform 0.1s;
+        }
+
+        .mini-btn:hover {
+            background: #333;
+            transform: scale(1.1);
+        }
+
+        .mini-btn.play {
+            background: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .mini-btn.stop {
+            background: var(--accent);
+        }
+
+        /* TELEPROMPTER (LYRICS) */
+        #teleprompter {
+            height: 80px;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 250px;
-        }
-
-        .chord-name {
-            font-size: 4rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        canvas.chord-diagram {
-            border: none;
-        }
-
-        /* TELEPROMPTER AREA */
-        #teleprompter {
-            height: 120px;
-            overflow: hidden;
-            position: relative;
-            background: #fafafa;
-            border-radius: 10px;
-            border: 1px solid #eee;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-shrink: 0;
         }
 
         .prompter-line {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
-            width: 100%;
             position: absolute;
-            left: 0;
+            width: 100%;
             text-align: center;
-        }
-
-        .prompter-line.past {
-            color: #ccc;
-            transform: translateY(-30px) scale(0.9);
-            opacity: 0.5;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            font-weight: 500;
         }
 
         .prompter-line.current {
-            color: var(--dark);
+            font-size: 1.3rem;
+            color: #000;
+            transform: translateY(0);
             font-weight: bold;
-            transform: translateY(30px) scale(1.1);
         }
 
-        .prompter-line.future {
-            color: #999;
-            transform: translateY(90px) scale(0.9);
+        .prompter-line.past {
+            font-size: 0.9rem;
+            color: #ccc;
+            transform: translateY(-25px);
             opacity: 0.5;
         }
 
+        .prompter-line.future {
+            font-size: 0.9rem;
+            color: #ccc;
+            transform: translateY(25px);
+            opacity: 0.5;
+        }
+
+        /* STAGE (CHORDS) */
+        #stage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px;
+        }
+
+        #active-chord-display {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            /* Full width for side positioning */
+            min-height: 200px;
+            justify-content: center;
+        }
+
+        .chord-name {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        /* SIDE CHORD BOXES */
+        .next-chord-box,
+        .prev-chord-box {
+            position: absolute;
+            top: 20px;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 8px 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 20;
+            width: 75px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .prev-chord-box {
+            left: 10px;
+            border-color: #eee;
+            opacity: 0.8;
+        }
+
+        .next-chord-box {
+            right: 10px;
+            border-color: var(--secondary);
+            border-width: 2px;
+        }
+
+        .side-chord-label {
+            font-size: 0.6rem;
+            color: #999;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .side-chord-val {
+            font-weight: 900;
+            color: var(--dark);
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        .next-chord-box .side-chord-val {
+            color: var(--primary);
+        }
+
+        /* HIGHLIGHTED CHORD BADGE IN LYRICS */
         .chord-badge {
-            background: var(--secondary);
+            background: var(--primary);
             color: white;
-            padding: 2px 8px;
-            border-radius: 5px;
-            margin-right: 8px;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: 900;
+            margin-right: 10px;
             font-size: 0.9em;
+            display: inline-block;
+            vertical-align: middle;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* STRUMMING */
+        .strum-container {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px dashed var(--secondary);
+            border-radius: 8px;
+            padding: 5px 15px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .strum-pattern {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
             font-weight: bold;
         }
 
-        /* CONTROLS */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 10px;
+        .strum-meta {
+            font-size: 0.8rem;
+            color: #555;
         }
 
-        button {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: filter 0.2s;
+        .strum-help-box {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            width: 200px;
+            text-align: left;
+            display: none;
+        }
+
+        /* FOOTER CONTROLS */
+        .footer-controls {
+            padding: 10px;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .slider-group {
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        button:hover {
-            filter: brightness(1.1);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button.secondary {
-            background: #95a5a6;
-        }
-
-        button.accent {
-            background: var(--accent);
-            color: var(--dark);
-        }
-
-        .slider-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
+        /* Range Input */
         input[type=range] {
-            flex: 1;
+            height: 4px;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
         }
 
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* PROGRESS */
         .progress-bar {
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
+            height: 4px;
+            background: #ddd;
             width: 100%;
-            margin-top: 15px;
-            overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
             background: var(--primary);
             width: 0%;
-            transition: width 0.2s linear;
         }
 
-        /* FOOTER INFO */
-        .status-info {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+        button.secondary {
+            background: #ccc;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
             font-size: 0.8rem;
-            color: #777;
-            margin-top: 5px;
         }
 
-        @media (max-width: 400px) {
-            .chord-name {
-                font-size: 3rem;
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
             }
 
-            #active-chord-display {
-                height: 200px;
+            100% {
+                transform: scale(1);
+                opacity: 1;
             }
         }
     </style>
@@ -259,89 +375,116 @@
 <body>
 
     <header>
-        <h1>🎸 UkeFlow</h1>
+        <h1>🎸 UkeFlow 🇯🇲</h1>
     </header>
 
     <main>
-        <div class="search-container">
+        <!-- TOP CONTROL BAR -->
+        <div class="control-bar">
             <select id="song-select">
-                <option value="" disabled selected>Elige una canción...</option>
-                <!-- Generated via JS -->
+                <option value="" disabled>Cargando canciones...</option>
             </select>
+            <button id="btn-reset" class="mini-btn stop" title="Reiniciar">⏮</button>
+            <button id="btn-play" class="mini-btn play" title="Play/Pause">▶</button>
         </div>
 
-        <div class="card" id="stage">
+        <!-- LYRICS / PROMPTER -->
+        <div id="teleprompter">
+            <div class="prompter-line past" id="line-prev">...</div>
+            <div class="prompter-line current" id="line-curr">¡Listo para tocar!</div>
+            <div class="prompter-line future" id="line-next">Dale Play ▶</div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <!-- MAIN STAGE -->
+        <div id="stage">
             <div id="active-chord-display">
+                <!-- PREV CHORD -->
+                <div class="prev-chord-box" id="prev-chord-container" style="display:none;">
+                    <div class="side-chord-label">Anterior</div>
+                    <div class="side-chord-val" id="prev-chord-val">-</div>
+                </div>
+
+                <!-- NEXT CHORD -->
+                <div class="next-chord-box" id="next-chord-container" style="display:none;">
+                    <div class="side-chord-label">Siguiente</div>
+                    <div class="side-chord-val" id="next-chord-val">-</div>
+                </div>
+
                 <div class="chord-name" id="current-chord-name">-</div>
                 <canvas id="chord-canvas" width="120" height="140"></canvas>
             </div>
 
-            <div id="teleprompter">
-                <div class="prompter-line past" id="line-prev">...</div>
-                <div class="prompter-line current" id="line-curr">¡Listo para tocar!</div>
-                <div class="prompter-line future" id="line-next">Dale Play ▶</div>
-            </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div class="status-info">
-                <span id="time-display">0:00 / 0:00</span>
-                <span id="bar-display">Compás: 1</span>
+            <!-- STRUMMING -->
+            <div class="strum-container">
+                <div class="strum-meta" id="strum-desc">-</div>
+                <div class="strum-pattern" id="strum-pattern">-</div>
+                <button id="btn-strum-help" class="strum-help-btn" style="float:right;">❓</button>
+                <div style="clear:both;"></div>
+                <div id="strum-help-box" class="strum-help-box">
+                    <strong>Guía de Símbolos:</strong><br>
+                    ⬇️ = Abajo<br>
+                    ⬆️ = Arriba<br>
+                    🛑 = Chasquido (Mute)<br>
+                    ・ = Pausa
+                </div>
             </div>
         </div>
 
-        <div class="card controls">
-            <button id="btn-play" class="accent">▶ Play</button>
-            <button id="btn-reset" class="secondary">⏮ Reinicio</button>
-
-            <div class="slider-control">
-                <span>🐢</span>
-                <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0">
-                <span>🐇</span>
+        <!-- FOOTER SETTINGS -->
+        <div class="footer-controls">
+            <div class="slider-group">
+                <span>Tempo:</span>
+                <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" style="width: 80px;">
                 <span id="speed-val">100%</span>
             </div>
 
-            <div class="slider-control" style="justify-content: center;">
-                <button class="secondary" id="btn-transpose-down" style="padding: 5px 15px;">b</button>
-                <span id="transpose-val" style="width: 30px; text-align: center;">0</span>
-                <button class="secondary" id="btn-transpose-up" style="padding: 5px 15px;">#</button>
+            <div class="slider-group">
+                <span>Transponer:</span>
+                <button class="secondary" id="btn-transpose-down">b</button>
+                <strong id="transpose-val">0</strong>
+                <button class="secondary" id="btn-transpose-up">#</button>
             </div>
         </div>
     </main>
 
     <script>
         /**
-         * DATABASE & LOGIC
-         */
+        * DATABASE & LOGIC
+        */
 
         // 1. CHORD DATABASE (Standard G-C-E-A tuning)
-        // Format: [G, C, E, A] strings. 0 = open, -1 = muted (uncommon in uke)
         const CHORD_LIBRARY = {
             'C': [0, 0, 0, 3], 'Cm': [0, 3, 3, 3], 'C7': [0, 0, 0, 1],
             'D': [2, 2, 2, 0], 'Dm': [2, 2, 1, 0], 'D7': [2, 2, 2, 3],
             'E': [4, 4, 4, 2], 'Em': [0, 4, 3, 2], 'E7': [1, 2, 0, 2],
-            'F': [2, 0, 1, 0], 'Fm': [1, 0, 1, 3],
+            'F': [2, 0, 1, 0], 'Fm': [1, 0, 1, 3], 'F#m': [2, 1, 2, 0],
             'G': [0, 2, 3, 2], 'Gm': [0, 2, 3, 1], 'G7': [0, 2, 1, 2],
             'A': [2, 1, 0, 0], 'Am': [2, 0, 0, 0], 'A7': [0, 1, 0, 0],
             'B': [4, 3, 2, 2], 'Bm': [4, 2, 2, 2], 'B7': [2, 3, 2, 2],
             'Bb': [3, 2, 1, 1]
-            // Add more as needed or smart-compute
         };
 
         // CHROMATIC SCALE for transposition
         const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-        // 2. SONG DATABASE (Simplified Format)
-        // Each line is roughly 4 beats by default unless specified.
-        // Format: Array of objects { c: 'Accord', l: 'Lyrics' }
-        // For simplicity, we assume 4/4 signature and 1 line = 1 bar (4 beats) approx for this demo,
-        // or we can treat each entry as a "segment" of time defined by BPM.
-
+        // 2. SONG DATABASE (With YouTube IDs)
+        // IDs are standard YouTube Video IDs
+        // 2. SONG DATABASE (With YouTube IDs)
+        // IDs are standard YouTube Video IDs
         const SONGS = [
             {
                 title: "I'm Yours - Jason Mraz",
-                bpm: 150, // fast-ish reggae feel
+                bpm: 151,
+                videoId: "EkHTsc9PU2A",
+                strumming: {
+                    pattern: "⬇️・⬇️⬆️・⬆️⬇️⬆️",
+                    desc: "Island Strum (1x por acorde)"
+                },
                 chords: [
                     { c: 'C', l: "Well, you done done me in, you bet I felt it" },
                     { c: 'G', l: "I tried to be chill, but you're so hot that I melted" },
@@ -359,7 +502,12 @@
             },
             {
                 title: "Riptide - Vance Joy",
-                bpm: 100,
+                bpm: 102,
+                videoId: "uJ_1HMAGb4k",
+                strumming: {
+                    pattern: "⬇️・⬇️⬆️・⬆️⬇️⬆️",
+                    desc: "Island Strum (1x por acorde)"
+                },
                 chords: [
                     { c: 'Am', l: "I was scared of dentists and the dark" },
                     { c: 'G', l: "I was scared of pretty girls and starting conversations" },
@@ -378,6 +526,11 @@
             {
                 title: "Somewhere Over The Rainbow - IZ",
                 bpm: 85,
+                videoId: "V1bFr2SWP1I",
+                strumming: {
+                    pattern: "⬇️・⬇️⬆️・⬆️⬇️⬆️",
+                    desc: "Island Strum (2x por acorde)"
+                },
                 chords: [
                     { c: 'C', l: "Oooo, oooo" }, { c: 'Em', l: "Oooo, oooo" },
                     { c: 'F', l: "Oooo, oooo" }, { c: 'C', l: "Oooo..." },
@@ -393,7 +546,12 @@
             },
             {
                 title: "Can't Help Falling in Love - Elvis",
-                bpm: 100, // 6/8 simplified to linear flow
+                bpm: 68,
+                videoId: "vGJTaP6anOU",
+                strumming: {
+                    pattern: "⬇️・⬇️・⬇️ (Arpegio)",
+                    desc: "Vals Lento (1x por pulso)"
+                },
                 chords: [
                     { c: 'C', l: "Wise" }, { c: 'G', l: "men" }, { c: 'Am', l: "say" },
                     { c: 'F', l: "only" }, { c: 'C', l: "fools" }, { c: 'G', l: "rush in" },
@@ -404,6 +562,11 @@
             {
                 title: "Stand By Me - Ben E. King",
                 bpm: 118,
+                videoId: "hwZNL7QVJjE",
+                strumming: {
+                    pattern: "⬇️🛑・⬆️⬇️⬆️",
+                    desc: "R&B Strum (muteado)"
+                },
                 chords: [
                     { c: 'A', l: "When the night has come" },
                     { c: 'F#m', l: "And the land is dark" },
@@ -414,13 +577,63 @@
                     { c: 'D', l: "Stand by me" },
                     { c: 'A', l: "So darlin', darlin', stand by me" }
                 ]
+            },
+            {
+                title: "Three Little Birds - Bob Marley",
+                bpm: 74,
+                videoId: "LanCLS_hIo4",
+                strumming: {
+                    pattern: "・⬇️・⬇️ (Reggae)",
+                    desc: "Golpe seco abajo en tiempos 2 y 4 (Contratiempo)"
+                },
+                chords: [
+                    { c: 'C', l: "Don't worry about a thing" },
+                    { c: 'F', l: "Cause every little thing" },
+                    { c: 'C', l: "Gonna be alright" },
+                    { c: 'C', l: "Singing' don't worry about a thing" },
+                    { c: 'F', l: "Cause every little thing" },
+                    { c: 'C', l: "Gonna be alright!" },
+                    { c: 'C', l: "Rise up this mornin'" },
+                    { c: 'G', l: "Smiled with the risin' sun" },
+                    { c: 'C', l: "Three little birds" },
+                    { c: 'F', l: "Pitch by my doorstep" },
+                    { c: 'C', l: "Singin' sweet songs" },
+                    { c: 'G', l: "Of melodies pure and true" },
+                    { c: 'F', l: "Saying', this is my message to you" }
+                ]
+            },
+            {
+                title: "Don't Worry Be Happy - Bobby McFerrin",
+                bpm: 66,
+                videoId: "d-diB65scQU",
+                strumming: {
+                    pattern: "⬇️🛑・⬇️⬆️🛑 (Swing)",
+                    desc: "Relajado"
+                },
+                chords: [
+                    { c: 'C', l: "Here's a little song I wrote" },
+                    { c: 'Dm', l: "You might want to sing it note for note" },
+                    { c: 'F', l: "Don't worry" },
+                    { c: 'C', l: "Be happy" },
+                    { c: 'C', l: "In every life we have some trouble" },
+                    { c: 'Dm', l: "But when you worry you make it double" },
+                    { c: 'F', l: "Don't worry" },
+                    { c: 'C', l: "Be happy" },
+                    { c: 'C', l: "Oooo, ooo" },
+                    { c: 'Dm', l: "Ooo, ooo" },
+                    { c: 'F', l: "Ooo, ooo" },
+                    { c: 'C', l: "Don't worry, be happy" }
+                ]
             }
-            // More songs can be added here
         ];
 
         /**
-         * ENGINE
-         */
+        * ENGINE
+        */
+
+        /**
+        * ENGINE
+        */
 
         class UkeApp {
             constructor() {
@@ -431,14 +644,11 @@
                 this.speedMultiplier = 1.0;
                 this.transposeStep = 0;
 
-                // Settings
-                this.beatsPerSegment = 4; // Simplification: assume each array item is 1 Bar (4 beats)
-
                 this.initUI();
                 this.loadSongList();
-
-                // Initial state
                 this.loadSong(0);
+
+                ukeAppInstance = this;
             }
 
             initUI() {
@@ -450,16 +660,26 @@
                     linePrev: document.getElementById('line-prev'),
                     lineCurr: document.getElementById('line-curr'),
                     lineNext: document.getElementById('line-next'),
+
+                    // Buttons in Control Bar
                     btnPlay: document.getElementById('btn-play'),
                     btnReset: document.getElementById('btn-reset'),
+
+                    // Footer Controls
                     speedSlider: document.getElementById('speed-slider'),
                     speedVal: document.getElementById('speed-val'),
-                    progress: document.getElementById('progress-fill'),
-                    timeDisplay: document.getElementById('time-display'),
                     btnUp: document.getElementById('btn-transpose-up'),
                     btnDown: document.getElementById('btn-transpose-down'),
                     transVal: document.getElementById('transpose-val'),
-                    barDisplay: document.getElementById('bar-display')
+
+                    // Display Areas
+                    progress: document.getElementById('progress-fill'),
+                    nextChordBox: document.getElementById('next-chord-container'),
+                    nextChordVal: document.getElementById('next-chord-val'),
+                    prevChordBox: document.getElementById('prev-chord-container'),
+                    prevChordVal: document.getElementById('prev-chord-val'),
+                    strumDesc: document.getElementById('strum-desc'),
+                    strumPattern: document.getElementById('strum-pattern')
                 };
 
                 // Listeners
@@ -474,43 +694,50 @@
 
                 this.els.btnUp.onclick = () => this.transpose(1);
                 this.els.btnDown.onclick = () => this.transpose(-1);
+
+                // Help Toggle
+                document.getElementById('btn-strum-help').onclick = () => {
+                    const box = document.getElementById('strum-help-box');
+                    box.style.display = box.style.display === 'none' || box.style.display === '' ? 'block' : 'none';
+                };
             }
 
             loadSongList() {
+                // Clear existing
+                this.els.select.innerHTML = '';
                 SONGS.forEach((song, idx) => {
                     const opt = document.createElement('option');
                     opt.value = idx;
                     opt.innerText = song.title;
                     this.els.select.appendChild(opt);
                 });
+
+                // Default Select First
+                this.els.select.value = 0;
             }
 
             transpose(step) {
                 this.transposeStep += step;
                 this.els.transVal.innerText = this.transposeStep > 0 ? `+${this.transposeStep}` : this.transposeStep;
-                this.updateDisplay(); // Redraw current chord
+                this.updateDisplay();
             }
 
             getTransposedChord(chordName) {
                 if (!chordName) return "";
-                // Simple regex to split Note + Suffix (e.g. "C#m" -> "C#", "m")
                 const match = chordName.match(/^([A-G][#b]?)(.*)$/);
                 if (!match) return chordName;
 
                 let note = match[1];
                 let suffix = match[2];
 
-                // Normalise flats to sharps for simplicity in lookup
                 const flatMap = { 'Bb': 'A#', 'Eb': 'D#', 'Ab': 'G#', 'Db': 'C#', 'Gb': 'F#' };
                 if (flatMap[note]) note = flatMap[note];
 
                 let idx = NOTES.indexOf(note);
-                if (idx === -1) return chordName; // Fallback
+                if (idx === -1) return chordName;
 
-                // Calculate new index wrapping around 12
                 let newIdx = (idx + this.transposeStep) % 12;
                 if (newIdx < 0) newIdx += 12;
-
                 return NOTES[newIdx] + suffix;
             }
 
@@ -520,6 +747,16 @@
                 this.currentIndex = 0;
                 this.transposeStep = 0;
                 this.els.transVal.innerText = "0";
+
+                // Update Strumming
+                if (this.currentSong.strumming) {
+                    this.els.strumDesc.innerText = this.currentSong.strumming.desc;
+                    this.els.strumPattern.innerText = this.currentSong.strumming.pattern;
+                } else {
+                    this.els.strumDesc.innerText = "-";
+                    this.els.strumPattern.innerText = "-";
+                }
+
                 this.updateDisplay();
             }
 
@@ -530,56 +767,53 @@
 
             start() {
                 if (!this.currentSong) return;
-                this.isPlaying = true;
-                this.els.btnPlay.innerHTML = "⏸ Pause";
-                this.els.btnPlay.classList.add('secondary');
-                this.els.btnPlay.classList.remove('accent');
+                this.startTimer();
+            }
 
-                // Logic to calculate step duration
-                // BPM = Beats Per Minute. 
-                // We assume each array part is 4 beats (1 bar).
-                // Duration (ms) = (60000 / BPM) * 4 * (1/Speed)
+            stop() {
+                this.stopTimer();
+            }
+
+            startTimer() {
+                this.isPlaying = true;
+                this.els.btnPlay.innerHTML = "⏸";
+                this.els.btnPlay.classList.add('stop');
+                this.els.btnPlay.classList.remove('play');
 
                 const loop = () => {
                     if (!this.isPlaying) return;
-
-                    // Advance
                     this.currentIndex++;
-
                     if (this.currentIndex >= this.currentSong.chords.length) {
                         this.stop();
                         return;
                     }
-
                     this.updateDisplay();
-
-                    // Schedule next check
-                    const msPerBeat = 60000 / this.currentSong.bpm;
-                    const msPerBar = msPerBeat * 4;
-                    const realDuration = msPerBar / this.speedMultiplier;
-
-                    this.intervalId = setTimeout(loop, realDuration);
-                    this.animateProgress(realDuration);
+                    this.scheduleNextBeat(loop);
                 };
 
-                // Start immediately
                 this.updateDisplay();
+                this.scheduleNextBeat(loop);
+            }
+
+            scheduleNextBeat(callback) {
+                // Determine speed
                 const msPerBeat = 60000 / this.currentSong.bpm;
                 const msPerBar = msPerBeat * 4;
                 const realDuration = msPerBar / this.speedMultiplier;
 
+                if (callback) {
+                    this.intervalId = setTimeout(callback, realDuration);
+                }
                 this.animateProgress(realDuration);
-                this.intervalId = setTimeout(loop, realDuration);
             }
 
-            stop() {
+            stopTimer() {
                 this.isPlaying = false;
                 clearTimeout(this.intervalId);
-                this.els.btnPlay.innerHTML = "▶ Play";
-                this.els.btnPlay.classList.remove('secondary');
-                this.els.btnPlay.classList.add('accent');
+                this.els.btnPlay.innerHTML = "▶";
+                this.els.btnPlay.classList.remove('stop');
+                this.els.btnPlay.classList.add('play');
 
-                // Kill progress animation
                 this.els.progress.style.transition = 'none';
                 this.els.progress.style.width = '0%';
             }
@@ -591,49 +825,45 @@
             }
 
             animateProgress(duration) {
-                // Reset to 0 forced
                 this.els.progress.style.transition = 'none';
                 this.els.progress.style.width = '0%';
-
-                // Force reflow
-                void this.els.progress.offsetWidth;
-
-                // Animate to 100%
+                void this.els.progress.offsetWidth; // force reflow
                 this.els.progress.style.transition = `width ${duration}ms linear`;
                 this.els.progress.style.width = '100%';
             }
 
             updateDisplay() {
                 if (!this.currentSong) return;
-
-                // Get neighbors
                 const prev = this.currentSong.chords[this.currentIndex - 1];
                 const curr = this.currentSong.chords[this.currentIndex];
                 const next = this.currentSong.chords[this.currentIndex + 1];
 
-                // Transpose logic for display
                 const tCurr = curr ? this.getTransposedChord(curr.c) : "";
                 const tPrev = prev ? this.getTransposedChord(prev.c) : "";
                 const tNext = next ? this.getTransposedChord(next.c) : "";
 
-                // UI Text
                 this.els.chordDisplay.innerText = tCurr || "-";
+
+                // Triple Chord Flow (Always show containers for symmetry)
+                this.els.prevChordBox.style.display = "block";
+                this.els.prevChordVal.innerText = tPrev || "-";
+                this.els.prevChordBox.style.opacity = tPrev ? "1" : "0.3";
+
+                this.els.nextChordBox.style.display = "block";
+                this.els.nextChordVal.innerText = tNext || "-";
+                this.els.nextChordBox.style.opacity = tNext ? "1" : "0.3";
 
                 this.els.linePrev.innerHTML = prev ? `<span class="chord-badge">${tPrev}</span> ${prev.l}` : "";
                 this.els.lineCurr.innerHTML = curr ? `<span class="chord-badge">${tCurr}</span> ${curr.l}` : "Fin de la canción";
                 this.els.lineNext.innerHTML = next ? `<span class="chord-badge">${tNext}</span> ${next.l}` : "";
 
-                // Draw Diagram
                 if (tCurr) this.drawChord(tCurr);
                 else this.clearCanvas();
 
-                // Info
-                const percent = Math.round((this.currentIndex / this.currentSong.chords.length) * 100);
-                this.els.timeDisplay.innerText = `${percent}% Completado`;
-                this.els.barDisplay.innerText = `Compás: ${this.currentIndex + 1}`;
+                // Removed footer status updates
             }
 
-            /* CANVAS DRAWING UTILS */
+            /* CANVAS DRAWING UTILS (Same as before) */
             clearCanvas() {
                 const ctx = this.els.canvas.getContext('2d');
                 ctx.clearRect(0, 0, 120, 140);
@@ -651,7 +881,6 @@
                 ctx.lineWidth = 2;
                 ctx.lineCap = "round";
 
-                // Draw Nut (Top line)
                 ctx.beginPath();
                 ctx.lineWidth = 4;
                 ctx.moveTo(padding, padding);
@@ -659,7 +888,6 @@
                 ctx.stroke();
                 ctx.lineWidth = 2;
 
-                // Draw Strings (Vertical) - G C E A
                 for (let i = 0; i < 4; i++) {
                     let x = padding + i * stringGap;
                     ctx.beginPath();
@@ -668,7 +896,6 @@
                     ctx.stroke();
                 }
 
-                // Draw Frets (Horizontal)
                 for (let i = 1; i <= 4; i++) {
                     let y = padding + i * fretGap;
                     ctx.beginPath();
@@ -677,36 +904,25 @@
                     ctx.stroke();
                 }
 
-                // Get fingering
-                // Simplified lookup. Dealing with complex names or non-db chords gracefully
-                // Try to strip 7ths or minors if not found to give *something* or just look for basic root
-
                 let fingers = CHORD_LIBRARY[chordName];
-
-                // Smart fallback strategies if exact chord not found
                 if (!fingers) {
-                    // 1. Try stripping 7 (G7 -> G)
                     if (chordName.endsWith('7')) fingers = CHORD_LIBRARY[chordName.replace('7', '')];
-                    // 2. Try stripping m (Cm -> C) - dangerous musically but better than blank? 
-                    // actually no, minor changes finger too much.
-                    // Just default to empty if not found
                 }
 
                 if (fingers) {
-                    ctx.fillStyle = "#FF6B6B";
+                    ctx.fillStyle = "#009B4D"; // Green Fingers
                     fingers.forEach((fret, strIdx) => {
                         if (fret > 0) {
                             let x = padding + strIdx * stringGap;
                             let y = padding + (fret - 0.5) * fretGap;
-
                             ctx.beginPath();
                             ctx.arc(x, y, 7, 0, Math.PI * 2);
                             ctx.fill();
                         } else {
-                            // Open string indication (circle at top)
                             let x = padding + strIdx * stringGap;
                             ctx.beginPath();
-                            ctx.strokeStyle = "#4ECDC4";
+                            ctx.strokeStyle = "#E43831"; // Red Open Strings
+                            ctx.lineWidth = 2;
                             ctx.arc(x, padding - 8, 4, 0, Math.PI * 2);
                             ctx.stroke();
                         }
@@ -717,9 +933,10 @@
 
         // Start
         window.onload = () => {
-            const app = new UkeApp();
+            if (!window.ukeAppInstance) {
+                window.ukeAppInstance = new UkeApp();
+            }
         };
-
     </script>
 
 </body>
